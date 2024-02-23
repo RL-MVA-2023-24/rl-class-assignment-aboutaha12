@@ -1,6 +1,7 @@
 from gymnasium.wrappers import TimeLimit
 from env_hiv import HIVPatient
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor
+
 import pickle
 
 import numpy as np
@@ -59,7 +60,8 @@ def rf_fqi(S, A, R, S2, D, iterations, nb_actions, gamma, disable_tqdm=False):
                 Q2[:, a2] = Qfunctions[-1].predict(S2A2)
             max_Q2 = np.max(Q2, axis=1)
             value = R + gamma * (1 - D) * max_Q2
-        Q = RandomForestRegressor()
+        # Q = RandomForestRegressor()
+        Q = ExtraTreesRegressor(n_estimators=100, random_state=0)
         Q.fit(SA, value)
         Qfunctions.append(Q)
     return Qfunctions
@@ -86,16 +88,16 @@ class ProjectAgent:
             pickle.dump(self.Qvalue, model)
 
     def load(self):
-        with open("src/model.pkl", "rb") as model:
+        with open("src/model_extratrees.pkl", "rb") as model:
             self.Qvalue = pickle.load(model)
 
 
 if __name__ == "__main__":
     gamma = 0.9
-    nb_iter = 100
+    nb_iter = 300
     nb_actions = env.action_space.n
     S, A, R, S2, D = collect_samples(env, int(1e4))
     Qfunctions = rf_fqi(S, A, R, S2, D, nb_iter, nb_actions, gamma)
     Qvalue = Qfunctions[-1]
     agent = ProjectAgent(Qvalue)
-    agent.save("src/model.pkl")
+    agent.save("src/model_extratrees.pkl")
