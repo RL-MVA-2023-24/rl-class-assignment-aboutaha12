@@ -107,7 +107,7 @@ class ProjectAgent:
 
 if __name__ == "__main__":
     gamma = 0.9
-    nb_iter = 10
+    nb_iter = 500
     nb_actions = env.action_space.n
     # S, A, R, S2, D = collect_samples(env, int(1e4))
     # np.save("src/states", S)
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     Qvalue = Qfunctions[-1]
     agent = ProjectAgent(Qvalue)
     agent.save("src/model_extratrees_20.pkl")
-    # Qfunctions = rf_fqi(S, A, R, S2, D, nb_iter, nb_actions, gamma)
-    # Qvalue = Qfunctions[-1]
-    # agent = ProjectAgent(Qvalue)
-    # agent.save("src/model_rf.pkl")
+    Qfunctions = rf_fqi(S, A, R, S2, D, nb_iter, nb_actions, gamma)
+    Qvalue = Qfunctions[-1]
+    agent = ProjectAgent(Qvalue)
+    agent.save("src/model_rf.pkl")
