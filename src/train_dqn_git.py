@@ -288,11 +288,11 @@ class ProjectAgentDQN:
         torch.save(self.model.state_dict(), path)
 
     def load(self):
-        self.model.load_state_dict(torch.load("src/DQN_7gs_150_256neur"))
+        self.model.load_state_dict(torch.load("src/DQN_10gs_250_512neur"))
         self.model.eval()
 
 
 config = {
     "nb_actions": env.action_space.n,
-    "nb_neurons": 256,
+    "nb_neurons": 512,
 }
