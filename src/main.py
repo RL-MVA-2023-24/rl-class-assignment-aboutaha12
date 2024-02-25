@@ -4,7 +4,7 @@ import numpy as np
 import torch
 
 from evaluate import evaluate_HIV, evaluate_HIV_population
-from train_dqn import (
+from train_dqn_git import (
     ProjectAgentDQN,
     config,
 )  # Replace DummyAgent with your agent implementation
