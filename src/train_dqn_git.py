@@ -142,17 +142,6 @@ class ProjectAgent:
             loss.backward()
             self.optimizer.step()
 
-    def gradient_step(self):
-        if len(self.memory) > self.batch_size:
-            X, A, R, Y, D = self.memory.sample(self.batch_size)
-            QYmax = self.target_model(Y).max(1)[0].detach()
-            update = torch.addcmul(R, 1 - D, QYmax, value=self.gamma)
-            QXA = self.model(X).gather(1, A.to(torch.long).unsqueeze(1))
-            loss = self.criterion(QXA, update.unsqueeze(1))
-            self.optimizer.zero_grad()
-            loss.backward()
-            self.optimizer.step()
-
     def train(self, max_episode):
         episode_return = []
         episode = 0
